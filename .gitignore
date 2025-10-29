@@ -1,0 +1,11 @@
+# Node dependencies
+node_modules/
+
+# Electron packaged output
+dist/
+
+# Logs
+*.log
+
+# User-specific icons
+assets/
