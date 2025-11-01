@@ -73,22 +73,6 @@ console.log('Installing dependencies...');
 execSync('npm install', { cwd: appDir, stdio: 'inherit' });
 
 // ----------------------
-// 6. Fix chrome-sandbox permissions
-// ----------------------
-
-try {
-  const chromeSandboxPath = path.join(appDir, 'node_modules', 'electron', 'dist', 'chrome-sandbox');
-  // Change owner to root
-  execSync(`sudo chown root:root "${chromeSandboxPath}"`);
-  // Set setuid bit
-  execSync(`sudo chmod 4755 "${chromeSandboxPath}"`);
-
-  console.log('chrome-sandbox permissions fixed');
-} catch (err) {
-  console.warn('Failed to fix chrome-sandbox permissions automatically. You may need to run manually:', err.message);
-}
-
-// ----------------------
 // Done
 // ----------------------
 console.log(`\nApp "${answers.name}" created successfully in ${appDir}`);
