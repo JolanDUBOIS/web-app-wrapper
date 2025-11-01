@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=__APPNAME__
+Comment=Desktop app for __URL__
+Exec=__APPDIR__/run.sh
+Icon=__ICON__
+Terminal=false
+Type=Application
+Categories=Office;Productivity;
+StartupNotify=true
+StartupWMClass=__APPNAME__

@@ -1,24 +1,12 @@
 {
-  "name": "web-app-wrapper",
+  "name": "web-app-wrapper-generator",
   "version": "1.0.0",
-  "description": "Electron wrapper for any website to turn into a desktop app.",
-  "main": "main.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node generate.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JolanDUBOIS/web-app-wrapper.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JolanDUBOIS/web-app-wrapper/issues"
-  },
-  "homepage": "https://github.com/JolanDUBOIS/web-app-wrapper#readme",
-  "devDependencies": {
-    "electron": "^39.0.0",
-    "electron-packager": "^17.1.2"
+  "dependencies": {
+    "inquirer": "^9.0.0",
+    "fs-extra": "^11.0.0"
   }
 }

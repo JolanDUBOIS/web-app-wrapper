@@ -9,3 +9,6 @@ dist/
 
 # User-specific icons
 assets/
+
+# Environment variables file
+.env

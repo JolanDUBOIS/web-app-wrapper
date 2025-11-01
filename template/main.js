@@ -2,6 +2,8 @@ const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
+let BASE_URL = "__URL__"; // placeholder to be replaced by generate.js
+
 // File to store last window bounds
 const boundsFile = path.join(app.getPath('userData'), 'window-bounds.json');
 let lastBounds = { width: 1200, height: 800 };
@@ -25,17 +27,8 @@ function saveBounds(bounds) {
   }
 }
 
-// Parse command line arguments
-const args = process.argv.slice(2);
-let baseUrl = process.env.BASE_URL || 'https://www.example.com';
-args.forEach(arg => {
-  if (arg.startsWith('--url=')) {
-    baseUrl = arg.split('=')[1];
-  }
-});
-
 // Create a new BrowserWindow
-function createWindow(url = baseUrl) {
+function createWindow(url = BASE_URL) {
   const win = new BrowserWindow({
     x: lastBounds.x ?? undefined,
     y: lastBounds.y ?? undefined,
@@ -44,30 +37,32 @@ function createWindow(url = baseUrl) {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: false,
-      nativeWindowOpen: true,
+      sandbox: false,          // needed for OAuth / login flows
+      nativeWindowOpen: true,  // allows popups in app
     },
-    frame: true,
+    frame: true,               // KDE native title bar
   });
 
   win.setMenu(null);
 
+  // Save bounds on move, resize, close
   const saveCurrentBounds = () => saveBounds(win.getBounds());
   win.on('resize', saveCurrentBounds);
   win.on('move', saveCurrentBounds);
   win.on('close', saveCurrentBounds);
 
+  // Handle new windows (internal vs external links)
   win.webContents.setWindowOpenHandler(({ url: newUrl }) => {
-    if (newUrl.startsWith(baseUrl)) {
-      createWindow(newUrl);
-    } else {
-      shell.openExternal(newUrl);
+    if (newUrl.startsWith(BASE_URL)) {
+      return { action: 'allow' };
     }
+    shell.openExternal(newUrl);
     return { action: 'deny' };
   });
 
+  // Prevent navigation to external URLs in current window
   win.webContents.on('will-navigate', (event, navUrl) => {
-    if (!navUrl.startsWith(baseUrl)) {
+    if (!navUrl.startsWith(BASE_URL)) {
       event.preventDefault();
       shell.openExternal(navUrl);
     }
@@ -84,6 +79,4 @@ app.whenReady().then(() => {
 });
 
 // Quit when all windows are closed
-app.on('window-all-closed', () => {
-  app.quit();
-});
+app.on('window-all-closed', () => app.quit());

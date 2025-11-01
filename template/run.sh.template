@@ -8,15 +8,15 @@ export WAYLAND_DISPLAY=wayland-0
 # Force Ozone platform for Wayland
 export OZONE_PLATFORM=wayland
 
-# Optional: adjust scaling
+# Optional: adjust scaling (tweak if needed)
 export GDK_SCALE=1
 export GDK_DPI_SCALE=1
 
 # Go to script directory
 cd "$(dirname "$0")"
 
-# Run the packaged Electron binary with Wayland flags
-../dist/ElectronWebAppWrapper-linux-x64/ElectronWebAppWrapper \
+# Run the packaged Electron binary
+./node_modules/.bin/electron . \
   --ozone-platform=wayland \
   --disable-gpu \
   --disable-features=WaylandFractionalScaleV1 \
